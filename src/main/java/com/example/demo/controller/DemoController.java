@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.classes.Calculator;
+
 import java.util.ArrayList;
 
 public class DemoController {
     // Create main function
-    public void main(String[] args) {
+    public static void main(String[] args) {
         System.out.println("Hello from DemoController!");
 
         int myNum = 5;               // Integer (whole number)
@@ -124,14 +126,40 @@ public class DemoController {
             for (int j = 0; j < myNumbers[i].length; j++) {
                 System.out.print(myNumbers[i][j] + " ");
             }
-            System.out.println("");
+            System.out.println("---");
         }
 
-        this.myMethod();
+        myMethod();
+        int number = 200, number2 = 600;
+        System.out.println("Multi number of methods is: "+ myMethod2(number, number2));
+
+        int myNum11 = plusMethod(8, 5);
+        double myNum22 = plusMethod(4.3, 6.26);
+        System.out.println("int: " + myNum11);
+        System.out.println("double: " + myNum22);
+
+        // How to use Calculator class
+        int sum1 = Calculator.plus(10, 20);
+        double sum2 = Calculator.plus(5.5, 3.3);
+        System.out.println("Sum of integers: " + sum1);
+        System.out.println("Sum of doubles: " + sum2);
     }
 
     // Create method
     public static void myMethod() {
         System.out.println("I just got executed!");
     }
+
+    static int myMethod2(int number, int number2)  {
+        return number * number2;
+    }
+
+    static int plusMethod(int x, int y) {
+        return x + y;
+    }
+
+    static double plusMethod(double x, double y) {
+        return x + y;
+    }
 }
+
