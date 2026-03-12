@@ -1,0 +1,172 @@
+### ================================================================
+### POST API - Test File
+### Tất cả endpoint của bài viết (Posts)
+### Base URL: http://localhost:8080
+### ================================================================
+
+### ----------------------------------------------------------------
+### 1. TẠO MỚI BÀI VIẾT (CREATE POST)
+### POST /api/users/{userId}/posts
+### Tạo bài viết cho user có id = 1
+### ----------------------------------------------------------------
+
+### 1a. Tạo bài viết PUBLISHED cho user 1
+POST http://localhost:8080/api/users/1/posts
+Content-Type: application/json
+
+{
+  "title": "Bài viết đầu tiên",
+  "content": "Đây là nội dung bài viết đầu tiên của tôi. Rất vui được chia sẻ!",
+  "status": "PUBLISHED"
+}
+
+###
+
+### 1b. Tạo bài viết DRAFT (nháp) cho user 1
+POST http://localhost:8080/api/users/1/posts
+Content-Type: application/json
+
+{
+  "title": "Bài viết nháp",
+  "content": "Đây là bài viết đang soạn thảo, chưa đăng.",
+  "status": "DRAFT"
+}
+
+###
+
+### 1c. Tạo bài viết cho user 2
+POST http://localhost:8080/api/users/2/posts
+Content-Type: application/json
+
+{
+  "title": "Bài viết của user 2",
+  "content": "Nội dung bài viết của user số 2.",
+  "status": "PUBLISHED"
+}
+
+###
+
+### ----------------------------------------------------------------
+### 2. LẤY TẤT CẢ BÀI VIẾT (GET ALL POSTS)
+### GET /api/posts
+### ----------------------------------------------------------------
+
+GET http://localhost:8080/api/posts
+
+###
+
+### ----------------------------------------------------------------
+### 3. LẤY BÀI VIẾT CỦA MỘT USER (GET POSTS BY USER)
+### GET /api/users/{userId}/posts
+### ----------------------------------------------------------------
+
+### 3a. Lấy tất cả bài viết của user 1
+GET http://localhost:8080/api/users/1/posts
+
+###
+
+### 3b. Lấy bài viết PUBLISHED của user 1
+GET http://localhost:8080/api/users/1/posts?status=PUBLISHED
+
+###
+
+### 3c. Lấy bài viết DRAFT của user 1
+GET http://localhost:8080/api/users/1/posts?status=DRAFT
+
+###
+
+### ----------------------------------------------------------------
+### 4. LẤY BÀI VIẾT THEO ID (GET POST BY ID)
+### GET /api/posts/{postId}
+### ----------------------------------------------------------------
+
+### 4a. Lấy bài viết có id = 1
+GET http://localhost:8080/api/posts/1
+
+###
+
+### 4b. Lấy bài viết không tồn tại (expect 404)
+GET http://localhost:8080/api/posts/9999
+
+###
+
+### ----------------------------------------------------------------
+### 5. CẬP NHẬT BÀI VIẾT (UPDATE POST)
+### PUT /api/users/{userId}/posts/{postId}
+### Chỉ user sở hữu bài viết mới có thể cập nhật
+### ----------------------------------------------------------------
+
+### 5a. Cập nhật bài viết id=1 của user id=1
+PUT http://localhost:8080/api/users/1/posts/1
+Content-Type: application/json
+
+{
+  "title": "Bài viết đã cập nhật",
+  "content": "Nội dung đã được chỉnh sửa và cập nhật.",
+  "status": "PUBLISHED"
+}
+
+###
+
+### 5b. Chuyển bài viết sang trạng thái ARCHIVED
+PUT http://localhost:8080/api/users/1/posts/1
+Content-Type: application/json
+
+{
+  "title": "Bài viết cũ",
+  "content": "Bài viết này đã được lưu trữ.",
+  "status": "ARCHIVED"
+}
+
+###
+
+### ----------------------------------------------------------------
+### 6. XÓA BÀI VIẾT (DELETE POST)
+### DELETE /api/users/{userId}/posts/{postId}
+### Chỉ user sở hữu bài viết mới có thể xóa
+### ----------------------------------------------------------------
+
+### 6a. Xóa bài viết id=2 của user id=1
+DELETE http://localhost:8080/api/users/1/posts/2
+
+###
+
+### 6b. Xóa bài viết không tồn tại (expect 404)
+DELETE http://localhost:8080/api/users/1/posts/9999
+
+###
+
+### ----------------------------------------------------------------
+### 7. LUỒNG KIỂM TRA ĐẦY ĐỦ (FULL FLOW TEST)
+### ----------------------------------------------------------------
+
+### Step 1: Tạo user mới
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "testuser@example.com",
+  "phone": "0901234567",
+  "address": "Hà Nội, Việt Nam"
+}
+
+###
+
+### Step 2: Tạo bài viết cho user vừa tạo (thay userId bằng id thực)
+POST http://localhost:8080/api/users/1/posts
+Content-Type: application/json
+
+{
+  "title": "Hello World Post",
+  "content": "Bài viết đầu tiên sau khi đăng ký.",
+  "status": "PUBLISHED"
+}
+
+###
+
+### Step 3: Xem tất cả bài viết của user
+GET http://localhost:8080/api/users/1/posts
+
+###
+

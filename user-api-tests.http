@@ -1,0 +1,80 @@
+### User CRUD API Test - REST Client File
+### Có thể sử dụng file này với IntelliJ IDEA HTTP Client hoặc VS Code REST Client extension
+
+### 1. Tạo User mới (CREATE)
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Nguyễn Văn A",
+  "email": "nguyenvana@example.com",
+  "phone": "0123456789",
+  "address": "Hà Nội, Việt Nam"
+}
+
+###
+
+### 2. Tạo thêm User khác
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Trần Thị B",
+  "email": "tranthib@example.com",
+  "phone": "0912345678",
+  "address": "Đà Nẵng, Việt Nam"
+}
+
+###
+
+### 3. Tạo thêm User thứ 3
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "name": "Lê Văn C",
+  "email": "levanc@example.com",
+  "phone": "0934567890",
+  "address": "TP. Hồ Chí Minh, Việt Nam"
+}
+
+###
+
+### 4. Lấy tất cả Users (READ ALL)
+GET http://localhost:8080/api/users
+
+###
+
+### 5. Lấy User theo ID (READ BY ID) - Thay đổi ID phù hợp
+GET http://localhost:8080/api/users/1
+
+###
+
+### 6. Lấy User theo Email (READ BY EMAIL)
+GET http://localhost:8080/api/users/email/nguyenvana@example.com
+
+###
+
+### 7. Cập nhật User (UPDATE) - Thay đổi ID phù hợp
+PUT http://localhost:8080/api/users/1
+Content-Type: application/json
+
+{
+  "name": "Nguyễn Văn A - Updated",
+  "email": "nguyenvana.updated@example.com",
+  "phone": "0987654321",
+  "address": "TP. Hồ Chí Minh, Việt Nam"
+}
+
+###
+
+### 8. Xóa User (DELETE) - Thay đổi ID phù hợp
+DELETE http://localhost:8080/api/users/1
+
+###
+
+### 9. Kiểm tra sau khi xóa
+GET http://localhost:8080/api/users
+
+###
+
