@@ -27,6 +27,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     /**
      * Title of the post, cannot be null
      * Tiêu đề bài viết, không được để trống

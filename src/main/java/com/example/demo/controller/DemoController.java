@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.classes.Calculator;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class DemoController {
     // Create main function
@@ -143,6 +144,29 @@ public class DemoController {
         double sum2 = Calculator.plus(5.5, 3.3);
         System.out.println("Sum of integers: " + sum1);
         System.out.println("Sum of doubles: " + sum2);
+
+
+        // Tạo đối tượng Scanner, truyền System.in (Bàn phím) vào Constructor
+        Scanner myObj = new Scanner(System.in);
+
+        System.out.println("Nhập tên của bạn:");
+
+        // Đọc nguyên 1 dòng văn bản (String) người dùng nhập
+        String userName = myObj.nextLine();
+
+        System.out.println("Tên bạn là: " + userName);
+
+
+        Scanner myObj2 = new Scanner(System.in);
+
+        System.out.println("Nhập tên, tuổi và lương:");
+
+        String name = myObj2.nextLine(); // Chờ nhập chuỗi
+        myObj2.nextLine(); // Dòng này đóng vai trò "ngốn" cái phím Enter bị thừa
+        int age = myObj2.nextInt();      // Chờ nhập số nguyên
+        double salary = myObj2.nextDouble(); // Chờ nhập số thập phân
+
+        System.out.println("Tên: " + name + " - Tuổi: " + age + " - Lương: " + salary);
     }
 
     // Create method
