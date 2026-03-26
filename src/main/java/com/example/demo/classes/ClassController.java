@@ -1,6 +1,16 @@
 package com.example.demo.classes;
 
+import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
+
 public class ClassController {
+    // Generic method: works with any type
+    public static <T> void printArray(T[] array) {
+        for (T element : array) {
+            System.out.println(element);
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("Hello from ClassController!");
 
@@ -60,6 +70,39 @@ public class ClassController {
         ErrorCode error = ErrorCode.NOT_FOUND;
         System.out.println("Lỗi số: " + error.getCode() + " - " + error.getMessage());
         // In ra: Lỗi số: 404 - Không tìm thấy dữ liệu
+
+
+        // Generic Class Example
+        // Create a Box to hold a String
+        Box<String> stringBox = new Box<>();
+        stringBox.set("Hello, Generics!");
+        System.out.println("String in box: " + stringBox.get());
+
+        // Create a Box to hold an Integer
+        Box<Integer> integerBox = new Box<>();
+        integerBox.set(123);
+        System.out.println("Integer in box: " + integerBox.get());
+
+        // Generic Method Example
+        // Array of Strings
+        String[] names = new String[]{"Hello", "World"};
+        Arrays.sort(names);
+        printArray(names);
+
+        // Array of Integers
+        Integer[] numbers = new Integer[]{1, 2, 3};
+        Arrays.sort(numbers);
+        printArray(numbers);
+
+        // Bounded Types
+        // Use with Integer
+        Integer[] numbers2 = new Integer[]{1, 2, 3};
+        Stats<Integer> intStats = new Stats<>(numbers2);
+        System.out.println("Average of numbers: " + intStats.average());
+        // Use with Double
+        Double[] doubleArray = new Double[]{1.1, 2.2, 3.3};
+        Stats<Double> doubleStats = new Stats<>(doubleArray);
+        System.out.println("Average of doubles: " + doubleStats.average());
     }
 }
 

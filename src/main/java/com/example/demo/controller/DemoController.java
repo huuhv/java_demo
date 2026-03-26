@@ -2,8 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.classes.Calculator;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class DemoController {
     // Create main function
@@ -146,27 +151,324 @@ public class DemoController {
         System.out.println("Sum of doubles: " + sum2);
 
 
-        // Tạo đối tượng Scanner, truyền System.in (Bàn phím) vào Constructor
-        Scanner myObj = new Scanner(System.in);
+//        // Tạo đối tượng Scanner, truyền System.in (Bàn phím) vào Constructor
+//        Scanner myObj = new Scanner(System.in);
+//
+//        System.out.println("Nhập tên của bạn:");
+//
+//        // Đọc nguyên 1 dòng văn bản (String) người dùng nhập
+//        String userName = myObj.nextLine();
+//
+//        System.out.println("Tên bạn là: " + userName);
+//
+//
+//        Scanner myObj2 = new Scanner(System.in);
+//
+//        System.out.println("Nhập tên, tuổi và lương:");
+//
+//        String name = myObj2.nextLine(); // Chờ nhập chuỗi
+//        myObj2.nextLine(); // Dòng này đóng vai trò "ngốn" cái phím Enter bị thừa
+//        int age = myObj2.nextInt();      // Chờ nhập số nguyên
+//        double salary = myObj2.nextDouble(); // Chờ nhập số thập phân
 
-        System.out.println("Nhập tên của bạn:");
+//        System.out.println("Tên: " + name + " - Tuổi: " + age + " - Lương: " + salary);
 
-        // Đọc nguyên 1 dòng văn bản (String) người dùng nhập
-        String userName = myObj.nextLine();
+        LocalDate myDate = LocalDate.now(); // Ví dụ in ra: 2026-03-19
+        System.out.println(myDate);
+        LocalTime myTime = LocalTime.now(); // Ví dụ in ra: 16:45:47.123456
+        System.out.println(myTime);
+        LocalDateTime myObj3 = LocalDateTime.now(); // Ví dụ in ra: 2026-03-19T16:45:47.123456
+        System.out.println(myObj3);
 
-        System.out.println("Tên bạn là: " + userName);
+        LocalDateTime myDateObj = LocalDateTime.now();
+        System.out.println("Trước khi format: " + myDateObj);
+
+        // Tạo một khuôn mẫu định dạng (Pattern) theo ý muốn
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        // Ép object thời gian vào khuôn mẫu đó để đẻ ra chuỗi String hiển thị
+        String formattedDate = myDateObj.format(myFormatObj);
+
+        System.out.println("Sau khi format: " + formattedDate);
+
+        File myFile = new File("C:\\Users\\hoang.van.huu\\Downloads\\ZCREATE_EKES.ABAP2");
+        try {
+            // IDE biết FileReader có thể gây ra FileNotFoundException
+            FileReader fr = new FileReader(myFile);
+            // Get content of files
+            BufferedReader br = new BufferedReader(fr);
+            System.out.println(br.toString());
+            System.out.println("Đọc file thành công!");
+        } catch (FileNotFoundException e) {
+            // Nếu lỗi xảy ra, code sẽ nhảy vào đây chứ không làm sập hệ thống
+            System.out.println("Cảnh báo: Không tìm thấy file.");
+            // e.printStackTrace(); // In ra chi tiết lỗi để debug
+        }
+
+        // Java không ép bạn phải try-catch đoạn code này, dù nó chắc chắn sẽ lỗi
+        String name = null;
+        try {
+            System.out.println(name.length());
+        } catch (NullPointerException e) {
+            System.out.println("Cảnh báo: Biến name đang là null, không thể gọi hàm length() trên nó.");
+            // e.printStackTrace();
+        }
+
+        // 1. Khai báo mở file ngay trong ngoặc đơn của try()
+        try (FileOutputStream output = new FileOutputStream("filename.txt", true)) {
+
+            output.write("Hello".getBytes());
+            // add \n\r to line
+            output.write("\n".getBytes());
+            output.write("Hello 2".getBytes());
+            output.write("\n".getBytes());
+            output.write("Hello 3".getBytes());
+            output.write("\n".getBytes());
+            System.out.println("Ghi file thành công!");
+
+            // 2. BẠN KHÔNG CẦN VIẾT output.close() Ở ĐÂY NỮA! Java sẽ tự lo việc đó.
+
+        } catch (IOException e) {
+            System.out.println("Có lỗi khi ghi file.");
+        }
+
+        File myObj = new File("filename2.txt"); // Specify the filename
+        try (FileWriter writer = new FileWriter(myObj, true)) {
+            writer.write("Hello, this is a test file. Xin chào, đây là file test");
+            writer.write("\n"); // Add a new line
+            writer.write("This file is created using FileWriter.");
+            writer.write("\n");
+            writer.write("Hello, this is a test file. Cũng là file test thôi");
+            writer.write("\n");
+            writer.write("This file is created using FileWriter.");
+            writer.write("\n");
+            System.out.println("File created and written successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file.");
+            e.printStackTrace();
+        }
+
+        // try-with-resources: Scanner will be closed automatically
+        try (Scanner myReader = new Scanner(myObj)) {
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                System.out.println(data);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        if (myObj.exists()) {
+            System.out.println("File name: " + myObj.getName());
+            System.out.println("Absolute path: " + myObj.getAbsolutePath());
+            System.out.println("Writeable: " + myObj.canWrite());
+            System.out.println("Readable " + myObj.canRead());
+            System.out.println("File size in bytes " + myObj.length());
+        } else {
+            System.out.println("The file does not exist.");
+        }
+
+//        File myObj2 = new File("filename.txt");
+//        if (myObj2.delete()) {
+//            System.out.println("Deleted the file: " + myObj2.getName());
+//        } else {
+//            System.out.println("Failed to delete the file.");
+//        }
+
+        System.out.println("===========FileInputStream============");
+        // try-with-resources: FileInputStream will be closed automatically
+        try (FileInputStream input = new FileInputStream("filename2.txt")) {
+
+            int i;  // variable to store each byte that is read
+
+            // Read one byte at a time until end of file (-1 means "no more data")
+            while ((i = input.read()) != -1) {
+                // Convert the byte to a character and print it to the console
+                System.out.print((char) i);
+            }
+
+        } catch (IOException e) {
+            // If an error happens (e.g. file not found), print an error message
+            System.out.println("Error reading file.");
+        }
+        System.out.println("\n");
+        System.out.println("============FileInputStream===========");
 
 
-        Scanner myObj2 = new Scanner(System.in);
+        System.out.println("================BufferedReader=FileReader======****************");
+        // 1. Try-with-resources để tự động đóng file
+        try (BufferedReader br = new BufferedReader(new FileReader("filename.txt"))) {
+            String line;
 
-        System.out.println("Nhập tên, tuổi và lương:");
+            // 2. Đọc từng dòng (line by line)
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        System.out.println("==================BufferedReader=FileReader====****************");
 
-        String name = myObj2.nextLine(); // Chờ nhập chuỗi
-        myObj2.nextLine(); // Dòng này đóng vai trò "ngốn" cái phím Enter bị thừa
-        int age = myObj2.nextInt();      // Chờ nhập số nguyên
-        double salary = myObj2.nextDouble(); // Chờ nhập số thập phân
+        System.out.println("*********=========BufferedReader=FileReader=============****************");
+        // 1. Try-with-resources để tự động đóng file
+        try (BufferedReader br = new BufferedReader(new FileReader("filename2.txt"))) {
+            String line;
 
-        System.out.println("Tên: " + name + " - Tuổi: " + age + " - Lương: " + salary);
+            // 2. Đọc từng dòng (line by line)
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        System.out.println("*********=============BufferedReader=FileReader=========****************");
+
+//        Scanner
+//                  Tệp văn bản nhỏ / Cần tách dữ liệu.
+//                  Có các hàm cực kỳ tiện như nextInt(), next(), giúp tách các số liệu hoặc từ ngữ rất dễ dàng. Tuy nhiên, nó khá chậm và tốn bộ nhớ.
+//        BufferedReader
+//                  Tệp văn bản lớn / Đọc theo dòng.
+//                  Rất nhanh, quản lý bộ nhớ tốt. Nếu bạn chỉ cần đọc text thuần túy từ file 1GB, đây là lựa chọn số 1.
+//        FileInputStream
+//                  Tệp nhị phân (ảnh, video, âm thanh, PDF).
+//                  Đọc dữ liệu thô (raw byte), không quan tâm đến mã hóa ký tự (encoding).
+
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("filename.txt", true))) {
+            bw.newLine();
+            bw.write("Appended line");
+        } catch (IOException e) {
+            System.out.println("Error writing to file.");
+        }
+
+//        FileWriter
+//                    Tệp văn bản nhỏ, đơn giản.
+//                    Ngắn gọn, dễ viết code. Nhưng chậm nếu phải ghi nhiều vì không có buffer.
+//        BufferedWriter
+//                    Tệp văn bản lớn, ghi nhiều dòng.
+//                    Hiệu suất cao (nhờ buffer). Có hàm newLine() cực kỳ tiện lợi để tách dòng.
+//        FileOutputStream
+//                    Tệp nhị phân (ảnh, âm thanh...).
+//                    Xử lý dữ liệu thô (raw byte), không dùng cho text trừ khi bắt buộc.
+
+        System.out.println("===========ArrayList============");
+        ArrayList<String> cars2 = new ArrayList<String>();
+        cars2.add("Volvo");
+        cars2.add("BMW");
+        cars2.add("Ford");
+        cars2.add("Mazda");
+        cars2.add("Jenny");
+        cars2.add(0, "Liam");
+        System.out.println(cars2);
+        // Get an iterator for ArrayList
+        Iterator itr = cars2.iterator();
+        while (itr.hasNext()) {
+            String car = (String) itr.next();
+            System.out.println(car);
+        }
+        System.out.println(cars2.get(cars2.size() - 1));
+        System.out.println("===========HashSet============");
+        HashSet<String> cars3 = new HashSet<String>();
+        cars3.add("Volvo");
+        cars3.add("BMW");
+        cars3.add("Ford");
+        cars3.add("Mazda");
+        cars3.add("BMW");
+        System.out.println(cars3);
+        // Get an iterator for HashSet
+        Iterator itr2 = cars3.iterator();
+        while (itr2.hasNext()) {
+            String car = (String) itr2.next();
+            System.out.println(car);
+        }
+
+        System.out.println("===========HashMap============");
+        HashMap<String, String> cars4 = new HashMap<String, String>();
+        cars4.put("England", "London");
+        cars4.put("France", "Paris");
+        cars4.put("Germany", "Berlin");
+        cars4.put("Vietnam", "Hanoi");
+        System.out.println(cars4);
+        System.out.println(cars4.get("England"));
+        // Get iterator for HashMap
+        Iterator itr3 = cars4.keySet().iterator();
+        while (itr3.hasNext()) {
+            String car = (String) itr3.next();
+            System.out.println(car);
+        }
+
+        System.out.println("===========LinkedList============");
+        LinkedList<String> cars5 = new LinkedList<String>();
+        cars5.add("Volvo");
+        cars5.add("BMW");
+        cars5.add("Ford");
+        cars5.add("Mazda");
+        System.out.println(cars5);
+        // Get an iterator for LinkedList
+        Iterator itr4 = cars5.iterator();
+        while (itr4.hasNext()) {
+            String car = (String) itr4.next();
+            System.out.println(car);
+        }
+
+        System.out.println("===========List Sorting============");
+        Collections.sort(cars2);  // Sort cars
+
+        for (String i : cars2) {
+            System.out.println(i);
+        }
+
+        ArrayList<Integer> myNumberArrs = new ArrayList<Integer>();
+        myNumberArrs.add(33);
+        myNumberArrs.add(15);
+        myNumberArrs.add(20);
+        myNumberArrs.add(34);
+        myNumberArrs.add(8);
+        myNumberArrs.add(12);
+
+        System.out.println(myNumberArrs);
+        Collections.sort(myNumberArrs);  // Sort myNumberArrs
+        System.out.println(myNumberArrs);
+
+        for (int i : myNumberArrs) {
+            System.out.println(i);
+        }
+        myNumberArrs.sort(Collections.reverseOrder());  // Sort myNumberArrs
+        System.out.println(myNumberArrs);
+
+        TreeMap<String, String> capitalCities = new TreeMap<>();
+        capitalCities.put("England", "London");
+        capitalCities.put("India", "New Dehli");
+        capitalCities.put("Austria", "Wien");
+        capitalCities.put("Norway", "Oslo");
+        capitalCities.put("USA", "Washington DC");
+        capitalCities.put("Norway", "Oslo"); // Duplicate
+
+        System.out.println(capitalCities);
+
+        ArrayList<String> names = new ArrayList<>();
+        names.add("Liam");
+        names.add("Jenny");
+        names.add("Kasper");
+        names.add("Angie");
+
+        Collections.sort(names); // must be sorted first
+        System.out.println(names);
+        int index = Collections.binarySearch(names, "Angie");
+        System.out.println("Angie is at index: " + index);
+
+        System.out.println("===========Lambda Expressions============");
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        numbers.add(5);
+        numbers.add(9);
+        numbers.add(8);
+        numbers.add(1);
+        numbers.forEach((m) -> { System.out.println(m); });
+
+        Consumer<Integer> method = (l) -> { System.out.println(l); };
+        numbers.forEach(method);
+
     }
 
     // Create method
